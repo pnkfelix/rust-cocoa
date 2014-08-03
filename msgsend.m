@@ -22,6 +22,10 @@ id invoke_msg_id(id theReceiver, SEL theSelector) {
     return objc_msgSend(theReceiver, theSelector);
 }
 
+id invoke_msg_id_char_constptr(id theReceiver, SEL theSelector, char const *a) {
+    return objc_msgSend(theReceiver, theSelector, a);
+}
+
 id invoke_msg_id_NSRect(id theReceiver, SEL theSelector, NSRect *rect) {
     return objc_msgSend(theReceiver, theSelector, *rect);
 }

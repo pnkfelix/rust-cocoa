@@ -9,7 +9,7 @@
 
 use appkit::NSRect;
 
-use libc::{c_double, c_long};
+use libc::{c_char, c_double, c_long};
 use libc;
 
 pub type Class = libc::intptr_t;
@@ -34,7 +34,7 @@ extern {
     pub fn objc_allocateClassPair(superclass: Class, name: *const libc::c_char, extraBytes: libc::size_t)
                                   -> Class;
     pub fn objc_getClass(name: *const libc::c_char) -> id;
-    pub fn objc_msgSend(theReceiver: id, theSelector: SEL) -> id;
+    pub fn objc_msgSend(theReceiver: id, theSelector: SEL, ...) -> id;
     pub fn objc_registerClassPair(cls: Class);
     pub fn sel_registerName(name: *const libc::c_char) -> SEL;
 }
@@ -146,6 +146,14 @@ impl ObjCMethodArgs for () {
     }
 }
 
+impl<'a> ObjCMethodArgs for &'a str {
+    #[inline]
+    unsafe fn send_args(self, receiver: id, selector: SEL) -> id {
+        let c_str = self.to_c_str();
+        invoke_msg_id_char_constptr(receiver, selector, c_str.as_ptr())
+    }
+}
+
 impl ObjCMethodArgs for (id, id, id, id, id) {
     #[inline]
     unsafe fn send_args(self, receiver: id, selector: SEL) -> id {
@@ -238,6 +246,8 @@ mod test {
 extern {
     fn invoke_msg_double(theReceiver: id, theSelector: SEL) -> f64;
     fn invoke_msg_id(theReceiver: id, theSelector: SEL) -> id;
+    fn invoke_msg_id_char_constptr(theReceiver: id, theSelector: SEL,
+                                   a: *const c_char) -> id;
     fn invoke_msg_id_id_id_id_id_id(theReceiver: id,
                                     theSelector: SEL,
                                     a: id,
