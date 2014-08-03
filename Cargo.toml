@@ -1,0 +1,23 @@
+[package]
+
+name = "rust-cocoa"
+version = "0.0.2"
+authors = [
+    "Brian Anderson <banderson@mozilla.com>",
+    "Brian J. Burg <burg@cs.washington.edu>",
+    "Donovan Preston <donovanpreston@gmail.com>",
+    "Felix S. Klock II <pnkfelix@pnkfx.org>",
+    "Jack Moffitt <jack@metajack.im>",
+    "Josh Matthews <josh@joshmatthews.net>",
+    "Keegan McAllister <kmcallister@mozilla.com>",
+    "Lars Bergstrom <lbergstrom@mozilla.com>",
+    "Ms2ger <ms2ger@gmail.com>",
+    "Patrick Walton <pcwalton@mimiga.net>",
+    "Simon Sapin <simon.sapin@exyr.org>",
+]
+build = "./cargo-build-libmsgsend.sh"
+
+[[lib]]
+
+name = "cocoa"
+path = "cocoa.rc"
