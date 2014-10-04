@@ -179,10 +179,10 @@ pub trait ObjCMethodLongArgs {
 pub trait ObjCMethodVoidArgs {
     unsafe fn send_void_args(self, receiver: id, selector: SEL);
 }
-trait ObjCMethodBoolArgs {
+pub trait ObjCMethodBoolArgs {
     unsafe fn send_bool_args(self, receiver: id, selector: SEL) -> bool;
 }
-trait ObjCMethodPointArgs {
+pub trait ObjCMethodPointArgs {
     unsafe fn send_point_args(self, receiver: id, selector: SEL) -> NSPoint;
 }
 
@@ -228,6 +228,37 @@ impl ObjCMethodArgs for (id, id, id, id, id) {
     unsafe fn send_args(self, receiver: id, selector: SEL) -> id {
         let (first, second, third, fourth, fifth) = self;
         invoke_msg_id_id_id_id_id_id(receiver, selector, first, second, third, fourth, fifth)
+    }
+}
+
+impl ObjCMethodArgs for (NSRect, id) {
+    #[inline]
+    unsafe fn send_args(self, receiver: id, selector: SEL) -> id {
+        let (first, second) = self;
+        invoke_msg_id_NSRect_id(receiver, selector, first, second)
+    }
+}
+
+impl<'a> ObjCMethodArgs for &'a [uint] {
+    #[inline]
+    unsafe fn send_args(self, receiver: id, selector: SEL) -> id {
+        invoke_msg_id_array(receiver, selector, self)
+    }
+}
+
+impl ObjCMethodArgs for (id, id) {
+    #[inline]
+    unsafe fn send_args(self, receiver: id, selector: SEL) -> id {
+        let (first, second) = self;
+        invoke_msg_id_id_id(receiver, selector, first, second)
+    }
+}
+
+impl ObjCMethodArgs for (NSUInteger, id, id, bool) {
+    #[inline]
+    unsafe fn send_args(self, receiver: id, selector: SEL) -> id {
+        let (first, second, third, fourth) = self;
+        invoke_msg_id_NSUInteger_id_id_bool(receiver, selector, first, second, third, fourth)
     }
 }
 
@@ -339,6 +370,15 @@ extern {
                                         d: id,
                                         e: id)
                                         -> id;
+    pub fn invoke_msg_id_NSRect_id(theReceiver: id, theSelector: SEL, a: NSRect, b: id) -> id;
+    pub fn invoke_msg_id_array(theReceiver: id, theSelector: SEL, a: &[uint]) -> id;
+    pub fn invoke_msg_id_id_id(theReceiver: id, theSelector: SEL, a: id, b: id) -> id;
+    pub fn invoke_msg_id_NSUInteger_id_id_bool(theReceiver: id,
+                                               theSelector: SEL,
+                                               a: NSUInteger,
+                                               b: id,
+                                               c: id,
+                                               d: bool) -> id;
     pub fn invoke_msg_long(theReceiver: id, theSelector: SEL) -> c_long;
     pub fn invoke_msg_void(theReceiver: id, theSelector: SEL);
     pub fn invoke_msg_void_bool(theReceiver: id, theSelector: SEL, a: bool);

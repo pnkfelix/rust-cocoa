@@ -42,6 +42,22 @@ id invoke_msg_id_NSRect_ulong_ulong_bool(id theReceiver, SEL theSelector, NSRect
 	return objc_msgSend(theReceiver, theSelector, a, b, c, d);
 }
 
+id invoke_msg_id_NSRect_id(id theReceiver, SEL theSelector, NSRect a, id b) {
+    return objc_msgSend(theReceiver, theSelector, a, b);
+}
+
+id invoke_msg_id_array(id theReceiver, SEL theSelector, unsigned int *a) {
+    return objc_msgSend(theReceiver, theSelector, a);
+}
+
+id invoke_msg_id_id_id(id theReceiver, SEL theSelector, id a, id b) {
+    return objc_msgSend(theReceiver, theSelector, a, b);
+}
+
+id invoke_msg_id_NSUInteger_id_id_bool(id theReceiver, SEL theSelector, NSUInteger a, id b, id c, bool d) {
+    return objc_msgSend(theReceiver, theSelector, a, b, c, d);
+}
+
 long invoke_msg_long(id theReceiver, SEL theSelector) {
     return (long)objc_msgSend(theReceiver, theSelector);
 }
