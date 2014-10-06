@@ -372,40 +372,41 @@ mod test {
 
 #[link(name = "msgsend", kind = "static")]
 extern {
-    pub fn invoke_msg_double(theReceiver: id, theSelector: SEL) -> f64;
-    pub fn invoke_msg_id(theReceiver: id, theSelector: SEL) -> id;
-    pub fn invoke_msg_id_id(theReceiver: id, theSelector: SEL, a: id) -> id;
-    pub fn invoke_msg_id_NSRect(theReceiver: id, theSelector: SEL, a: &NSRect) -> id;
-    pub fn invoke_msg_id_id_SEL_id(theReceiver: id, theSelector: SEL, a: id, b: SEL, c: id) -> id;
-    pub fn invoke_msg_id_NSRect_ulong_ulong_bool(theReceiver: id,
-                                                 theSelector: SEL,
-                                                 a: NSRect,
-                                                 b: c_ulong,
-                                                 c: c_ulong,
-                                                 d: bool) -> id;
-    pub fn invoke_msg_id_id_id_id_id_id(theReceiver: id,
-                                        theSelector: SEL,
-                                        a: id,
-                                        b: id,
-                                        c: id,
-                                        d: id,
-                                        e: id)
-                                        -> id;
-    pub fn invoke_msg_id_NSRect_id(theReceiver: id, theSelector: SEL, a: NSRect, b: id) -> id;
-    pub fn invoke_msg_id_array(theReceiver: id, theSelector: SEL, a: &[uint]) -> id;
-    pub fn invoke_msg_id_id_id(theReceiver: id, theSelector: SEL, a: id, b: id) -> id;
-    pub fn invoke_msg_id_NSUInteger_id_id_bool(theReceiver: id,
-                                               theSelector: SEL,
-                                               a: NSUInteger,
-                                               b: id,
-                                               c: id,
-                                               d: bool) -> id;
-    pub fn invoke_msg_long(theReceiver: id, theSelector: SEL) -> c_long;
-    pub fn invoke_msg_void(theReceiver: id, theSelector: SEL);
-    pub fn invoke_msg_void_bool(theReceiver: id, theSelector: SEL, a: bool);
-    pub fn invoke_msg_void_id(theReceiver: id, theSelector: SEL, a: id);
-    pub fn invoke_msg_bool_long(theReceiver: id, theSelector: SEL, a: c_long) -> bool;
-    pub fn invoke_msg_NSPoint_NSPoint(theReceiver: id, theSelector: SEL, a: NSPoint) -> NSPoint;
-    pub fn invoke_msg_NSEventType(theReceiver: id, theSelector: SEL) -> NSEventType;
+    fn invoke_msg_double(theReceiver: id, theSelector: SEL) -> f64;
+    fn invoke_msg_id(theReceiver: id, theSelector: SEL) -> id;
+    fn invoke_msg_id_id(theReceiver: id, theSelector: SEL, a: id) -> id;
+    fn invoke_msg_id_NSRect(theReceiver: id, theSelector: SEL, a: &NSRect) -> id;
+    fn invoke_msg_id_id_SEL_id(theReceiver: id, theSelector: SEL, a: id, b: SEL, c: id) -> id;
+    fn invoke_msg_id_NSRect_ulong_ulong_bool(theReceiver: id,
+                                             theSelector: SEL,
+                                             a: NSRect,
+                                             b: c_ulong,
+                                             c: c_ulong,
+                                             d: bool) -> id;
+    fn invoke_msg_id_id_id_id_id_id(theReceiver: id,
+                                    theSelector: SEL,
+                                    a: id,
+                                    b: id,
+                                    c: id,
+                                    d: id,
+                                    e: id)
+                                    -> id;
+    fn invoke_msg_id_NSRect_id(theReceiver: id, theSelector: SEL, a: NSRect, b: id) -> id;
+    fn invoke_msg_id_array(theReceiver: id, theSelector: SEL, a: &[uint]) -> id;
+    fn invoke_msg_id_id_id(theReceiver: id, theSelector: SEL, a: id, b: id) -> id;
+    fn invoke_msg_id_NSUInteger_id_id_bool(theReceiver: id,
+                                           theSelector: SEL,
+                                           a: NSUInteger,
+                                           b: id,
+                                           c: id,
+                                           d: bool) -> id;
+    fn invoke_msg_long(theReceiver: id, theSelector: SEL) -> c_long;
+    fn invoke_msg_void(theReceiver: id, theSelector: SEL);
+    fn invoke_msg_void_bool(theReceiver: id, theSelector: SEL, a: bool);
+    fn invoke_msg_void_id(theReceiver: id, theSelector: SEL, a: id);
+    fn invoke_msg_bool_long(theReceiver: id, theSelector: SEL, a: c_long) -> bool;
+    fn invoke_msg_NSPoint_NSPoint(theReceiver: id, theSelector: SEL, a: NSPoint) -> NSPoint;
+    fn invoke_msg_NSEventType(theReceiver: id, theSelector: SEL) -> NSEventType;
+    fn invoke_msg_NSEventType(theReceiver: id, theSelector: SEL) -> NSEventType;
 }
 
