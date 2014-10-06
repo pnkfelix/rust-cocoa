@@ -245,7 +245,11 @@ pub trait NSApplication {
     unsafe fn activateIgnoringOtherApps_(self, ignore: bool);
     unsafe fn run(self);
     unsafe fn finishLaunching(self);
-    unsafe fn nextEventMatchingMask_untilDate_inMode_dequeue_(self, mask: NSUInteger, expiration: id, in_mode: id, dequeue: bool) -> id;
+    unsafe fn nextEventMatchingMask_untilDate_inMode_dequeue_(self,
+                                                              mask: NSUInteger,
+                                                              expiration: id,
+                                                              in_mode: id,
+                                                              dequeue: bool) -> id;
     unsafe fn sendEvent_(self, an_event: id);
 }
 
@@ -270,8 +274,13 @@ impl NSApplication for id {
         self.send_void("finishLaunching", ())
     }
 
-    unsafe fn nextEventMatchingMask_untilDate_inMode_dequeue_(self, mask: NSUInteger, expiration: id, in_mode: id, dequeue: bool) -> id {
-        self.send("nextEventMatchingMask:untilDate:inMode:dequeue:", (mask, expiration, in_mode, dequeue))
+    unsafe fn nextEventMatchingMask_untilDate_inMode_dequeue_(self,
+                                                              mask: NSUInteger,
+                                                              expiration: id,
+                                                              in_mode: id,
+                                                              dequeue: bool) -> id {
+        self.send("nextEventMatchingMask:untilDate:inMode:dequeue:",
+                  (mask, expiration, in_mode, dequeue))
     }
 
     unsafe fn sendEvent_(self, an_event: id) {
@@ -476,5 +485,29 @@ impl NSOpenGLContext for id {
 
     unsafe fn flushBuffer(self) {
         self.send_void("flushBuffer", ())
+    }
+}
+
+pub trait NSDate {
+    unsafe fn distantPast(_: Self) -> id {
+        "NSDate".send("distantPast", ())
+    }
+
+    unsafe fn distantFuture(_: Self) -> id {
+        "NSDate".send("distantFuture", ())
+    }
+}
+
+impl NSDate for id {
+
+}
+
+pub trait NSEvent {
+    unsafe fn get_type(self) -> NSEventType;
+}
+
+impl NSEvent for id {
+    unsafe fn get_type(self) -> NSEventType {
+        self.send_event("type", ())
     }
 }
