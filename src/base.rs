@@ -7,7 +7,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use appkit::{NSRect, NSPoint};
+use appkit::{NSRect, NSPoint, NSEventType};
 
 use libc::{c_double, c_long, c_ulong, c_char};
 use libc;
@@ -76,6 +76,7 @@ pub trait ObjCMethodCall {
     unsafe fn send_void<S:ObjCSelector,A:ObjCMethodVoidArgs>(self, selector: S, args: A);
     unsafe fn send_bool<S:ObjCSelector,A:ObjCMethodBoolArgs>(self, selector: S, args: A) -> bool;
     unsafe fn send_point<S:ObjCSelector,A:ObjCMethodPointArgs>(self, selector: S, args: A) -> NSPoint;
+    unsafe fn send_event<S:ObjCSelector,A:ObjCMethodEventArgs>(self, selector: S, args: A) -> NSEventType;
 
 }
 
@@ -107,6 +108,11 @@ impl ObjCMethodCall for id {
     unsafe fn send_point<S:ObjCSelector,A:ObjCMethodPointArgs>(self, selector: S, args: A)
                         -> NSPoint {
         args.send_point_args(self, selector.as_selector())
+    }
+    #[inline]
+    unsafe fn send_event<S:ObjCSelector,A:ObjCMethodEventArgs>(self, selector: S, args: A)
+                        -> NSEventType {
+        args.send_event_args(self, selector.as_selector())
     }
 }
 
@@ -141,6 +147,11 @@ impl<'a> ObjCMethodCall for &'a str {
     unsafe fn send_point<S:ObjCSelector,A:ObjCMethodPointArgs>(self, selector: S, args: A)
                         -> NSPoint {
         args.send_point_args(class(self), selector.as_selector())
+    }
+    #[inline]
+    unsafe fn send_event<S:ObjCSelector,A:ObjCMethodEventArgs>(self, selector: S, args: A)
+                        -> NSEventType {
+        args.send_event_args(class(self), selector.as_selector())
     }
 }
 
@@ -184,6 +195,9 @@ pub trait ObjCMethodBoolArgs {
 }
 pub trait ObjCMethodPointArgs {
     unsafe fn send_point_args(self, receiver: id, selector: SEL) -> NSPoint;
+}
+pub trait ObjCMethodEventArgs {
+    unsafe fn send_event_args(self, receiver: id, selector: SEL) -> NSEventType;
 }
 
 impl ObjCMethodArgs for () {
@@ -311,6 +325,13 @@ impl ObjCMethodPointArgs for NSPoint {
     }
 }
 
+impl ObjCMethodEventArgs for () {
+    #[inline]
+    unsafe fn send_event_args(self, receiver: id, selector: SEL) -> NSEventType {
+        invoke_msg_NSEventType(receiver, selector)
+    }
+}
+
 /// A trait that simulates variadic parameters for method calls.
 
 #[cfg(test)]
@@ -385,5 +406,6 @@ extern {
     pub fn invoke_msg_void_id(theReceiver: id, theSelector: SEL, a: id);
     pub fn invoke_msg_bool_long(theReceiver: id, theSelector: SEL, a: c_long) -> bool;
     pub fn invoke_msg_NSPoint_NSPoint(theReceiver: id, theSelector: SEL, a: NSPoint) -> NSPoint;
+    pub fn invoke_msg_NSEventType(theReceiver: id, theSelector: SEL) -> NSEventType;
 }
 

@@ -83,3 +83,6 @@ NSPoint invoke_msg_NSPoint_NSPoint(id theReceiver, SEL theSelector, NSPoint poin
     return f(theReceiver, theSelector, point);
 }
 
+NSEventType invoke_msg_NSEventType(id theReceiver, SEL theSelector) {
+    return objc_msgSend(theReceiver, theSelector);
+}
