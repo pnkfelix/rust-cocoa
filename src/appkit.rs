@@ -339,7 +339,8 @@ pub trait NSWindow {
     unsafe fn setTitle_(self, title: id);
     unsafe fn makeKeyAndOrderFront_(self, sender: id);
     unsafe fn center(self);
-    unsafe fn setContentView(self, view: id);
+    unsafe fn setContentView_(self, view: id);
+    unsafe fn setAcceptsMouseMovedEvents_(self, accept: bool);
 }
 
 impl NSWindow for id {
@@ -368,8 +369,12 @@ impl NSWindow for id {
         self.send_void("center", ())
     }
 
-    unsafe fn setContentView(self, view: id) {
+    unsafe fn setContentView_(self, view: id) {
         self.send_void("setContentView:", view)
+    }
+
+    unsafe fn setAcceptsMouseMovedEvents_(self, accept: bool) {
+        self.send_void("setAcceptsMouseMovedEvents:", accept);
     }
 }
 
@@ -406,6 +411,7 @@ pub trait NSView {
     unsafe fn initWithFrame_(self, frameRect: NSRect) -> id;
     unsafe fn display_(self);
     unsafe fn setWantsBestResolutionOpenGLSurface_(self, flag: bool);
+    unsafe fn convertPoint_fromView_(self, point: NSPoint, view: id) -> NSPoint;
 }
 
 impl NSView for id {
@@ -423,6 +429,10 @@ impl NSView for id {
 
     unsafe fn setWantsBestResolutionOpenGLSurface_(self, flag: bool) {
         self.send_void("setWantsBestResolutionOpenGLSurface:", flag)
+    }
+
+    unsafe fn convertPoint_fromView_(self, point: NSPoint, view: id) -> NSPoint {
+        self.send_point("convertPoint:fromView:", (point, view))
     }
 }
 
@@ -504,10 +514,15 @@ impl NSDate for id {
 
 pub trait NSEvent {
     unsafe fn get_type(self) -> NSEventType;
+    unsafe fn locationInWindow(self) -> NSPoint;
 }
 
 impl NSEvent for id {
     unsafe fn get_type(self) -> NSEventType {
         self.send_event("type", ())
+    }
+
+    unsafe fn locationInWindow(self) -> NSPoint {
+        self.send_point("locationInWindow", ())
     }
 }

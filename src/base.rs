@@ -325,6 +325,13 @@ impl ObjCMethodPointArgs for NSPoint {
     }
 }
 
+impl ObjCMethodPointArgs for () {
+    #[inline]
+    unsafe fn send_point_args(self, receiver: id, selector: SEL) -> NSPoint {
+        invoke_msg_id_NSPoint(receiver, selector)
+    }
+}
+
 impl ObjCMethodEventArgs for () {
     #[inline]
     unsafe fn send_event_args(self, receiver: id, selector: SEL) -> NSEventType {
@@ -332,6 +339,13 @@ impl ObjCMethodEventArgs for () {
     }
 }
 
+impl ObjCMethodPointArgs for (NSPoint, id) {
+    #[inline]
+    unsafe fn send_point_args(self, receiver: id, selector: SEL) -> NSPoint {
+        let (first, second) = self;
+        invoke_msg_NSPoint_NSPoint_id(receiver, selector, first, second)
+    }
+}
 /// A trait that simulates variadic parameters for method calls.
 
 #[cfg(test)]
@@ -407,5 +421,7 @@ extern {
     fn invoke_msg_bool_long(theReceiver: id, theSelector: SEL, a: c_long) -> bool;
     fn invoke_msg_NSPoint_NSPoint(theReceiver: id, theSelector: SEL, a: NSPoint) -> NSPoint;
     fn invoke_msg_NSEventType(theReceiver: id, theSelector: SEL) -> NSEventType;
+    fn invoke_msg_id_NSPoint(theReceiver: id, theSelector: SEL) -> NSPoint;
+    fn invoke_msg_NSPoint_NSPoint_id(theReceiver: id, theSelector: SEL, a: NSPoint, b: id) -> NSPoint;
 }
 

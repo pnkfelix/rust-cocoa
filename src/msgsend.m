@@ -83,6 +83,17 @@ NSPoint invoke_msg_NSPoint_NSPoint(id theReceiver, SEL theSelector, NSPoint poin
     return f(theReceiver, theSelector, point);
 }
 
+NSPoint invoke_msg_id_NSPoint(id theReceiver, SEL theSelector) {
+    NSPoint (*f)(id self, SEL op) = (NSPoint *)objc_msgSend;
+    return f(theReceiver, theSelector);
+}
+
 NSEventType invoke_msg_NSEventType(id theReceiver, SEL theSelector) {
     return objc_msgSend(theReceiver, theSelector);
+}
+
+
+NSPoint invoke_msg_NSPoint_NSPoint_id(id theReceiver, SEL theSelector, NSPoint a, id b) {
+    NSPoint (*f)(id self, SEL op, NSPoint a, id b) = (NSPoint *)objc_msgSend;
+    return f(theReceiver, theSelector, a, b);
 }
