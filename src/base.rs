@@ -79,6 +79,8 @@ pub trait ObjCMethodCall {
     unsafe fn send_event<S:ObjCSelector,A:ObjCMethodEventArgs>(self, selector: S, args: A) -> NSEventType;
     unsafe fn send_eventSubtype<S:ObjCSelector,A:ObjCMethodEventSubtypeArgs>(self, selector: S, args: A) -> NSEventSubtype;
     unsafe fn send_string<S:ObjCSelector,A:ObjCMethodStringArgs>(self, selector: S, args: A) -> *const libc::c_char;
+    unsafe fn send_ushort<S:ObjCSelector,A:ObjCMethodUShortArgs>(self, selector: S, args: A) -> libc::c_ushort;
+    unsafe fn send_NSUInteger<S:ObjCSelector,A:ObjCMethodNSUIntegerArgs>(self, selector: S, args: A) -> NSUInteger;
 
 }
 
@@ -125,6 +127,16 @@ impl ObjCMethodCall for id {
     unsafe fn send_string<S:ObjCSelector,A:ObjCMethodStringArgs>(self, selector: S, args: A)
                         -> *const libc::c_char {
         args.send_string_args(self, selector.as_selector())
+    }
+    #[inline]
+    unsafe fn send_ushort<S:ObjCSelector,A:ObjCMethodUShortArgs>(self, selector: S, args: A)
+                        -> libc::c_ushort {
+        args.send_ushort_args(self, selector.as_selector())
+    }
+    #[inline]
+    unsafe fn send_NSUInteger<S:ObjCSelector,A:ObjCMethodNSUIntegerArgs>(self, selector: S, args: A)
+                        -> NSUInteger {
+        args.send_NSUInteger_args(self, selector.as_selector())
     }
 }
 
@@ -174,6 +186,16 @@ impl<'a> ObjCMethodCall for &'a str {
     unsafe fn send_string<S:ObjCSelector,A:ObjCMethodStringArgs>(self, selector: S, args: A)
                         -> *const libc::c_char {
         args.send_string_args(class(self), selector.as_selector())
+    }
+    #[inline]
+    unsafe fn send_ushort<S:ObjCSelector,A:ObjCMethodUShortArgs>(self, selector: S, args: A)
+                        -> libc::c_ushort {
+        args.send_ushort_args(class(self), selector.as_selector())
+    }
+    #[inline]
+    unsafe fn send_NSUInteger<S:ObjCSelector,A:ObjCMethodNSUIntegerArgs>(self, selector: S, args: A)
+                        -> NSUInteger {
+        args.send_NSUInteger_args(class(self), selector.as_selector())
     }
 }
 
@@ -228,6 +250,14 @@ pub trait ObjCMethodEventSubtypeArgs {
 
 pub trait ObjCMethodStringArgs {
     unsafe fn send_string_args(self, receiver: id, selector: SEL) -> *const libc::c_char;
+}
+
+pub trait ObjCMethodUShortArgs {
+    unsafe fn send_ushort_args(self, received: id, selector: SEL) -> libc::c_ushort;
+}
+
+pub trait ObjCMethodNSUIntegerArgs {
+    unsafe fn send_NSUInteger_args(self, received: id, selector: SEL) -> NSUInteger;
 }
 
 impl ObjCMethodArgs for () {
@@ -398,6 +428,20 @@ impl ObjCMethodStringArgs for () {
     }
 }
 
+impl ObjCMethodUShortArgs for () {
+    #[inline]
+    unsafe fn send_ushort_args(self, receiver: id, selector: SEL) -> libc::c_ushort {
+        invoke_msg_ushort(receiver, selector)
+    }
+}
+
+impl ObjCMethodNSUIntegerArgs for () {
+    #[inline]
+    unsafe fn send_NSUInteger_args(self, receiver: id, selector: SEL) -> NSUInteger {
+        invoke_msg_NSUInteger(receiver, selector)
+    }
+}
+
 /// A trait that simulates variadic parameters for method calls.
 
 #[cfg(test)]
@@ -478,5 +522,7 @@ extern {
     fn invoke_msg_NSPoint_NSPoint_id(theReceiver: id, theSelector: SEL, a: NSPoint, b: id) -> NSPoint;
     fn invoke_msg_NSEventSubtype(theReceiver: id, theSelector: SEL) -> NSEventSubtype;
     fn invoke_msg_string(theReceiver: id, theSelector: SEL) -> *const libc::c_char;
+    fn invoke_msg_ushort(theReceiver: id, theSelector: SEL) -> libc::c_ushort;
+    fn invoke_msg_NSUInteger(theReceiver: id, theSelector: SEL) -> NSUInteger;
 }
 

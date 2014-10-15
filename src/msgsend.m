@@ -109,3 +109,11 @@ NSEventSubtype invoke_msg_NSEventSubtype(id theReceiver, SEL theSelector) {
 const char* invoke_msg_string(id theReceiver, SEL theSelector) {
     return objc_msgSend(theReceiver, theSelector);
 }
+
+unsigned short invoke_msg_ushort(id theReceiver, SEL theSelector) {
+    return objc_msgSend(theReceiver, theSelector);
+}
+
+NSUInteger invoke_msg_NSUInteger(id theReceiver, SEL theSelector) {
+    return objc_msgSend(theReceiver, theSelector);
+}
