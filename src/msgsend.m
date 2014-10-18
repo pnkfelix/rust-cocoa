@@ -78,34 +78,35 @@ bool invoke_msg_bool(id theReceiver, SEL theSelector) {
     return objc_msgSend(theReceiver, theSelector);
 }
 
-char invoke_msg_bool_long(id theReceiver, SEL theSelector, long a) {
+bool invoke_msg_bool_long(id theReceiver, SEL theSelector, long a) {
 	return objc_msgSend(theReceiver, theSelector, a);
 }
 
 NSPoint invoke_msg_NSPoint_NSPoint(id theReceiver, SEL theSelector, NSPoint point) {
-    NSPoint (*f)(id self, SEL op, NSPoint p) = (NSPoint *)objc_msgSend;
+    NSPoint (*f)(id self, SEL op, NSPoint p) = (void *)objc_msgSend;
     return f(theReceiver, theSelector, point);
 }
 
 NSPoint invoke_msg_id_NSPoint(id theReceiver, SEL theSelector) {
-    NSPoint (*f)(id self, SEL op) = (NSPoint *)objc_msgSend;
+    NSPoint (*f)(id self, SEL op) = (void *)objc_msgSend;
     return f(theReceiver, theSelector);
 }
 
 NSEventType invoke_msg_NSEventType(id theReceiver, SEL theSelector) {
-    return objc_msgSend(theReceiver, theSelector);
+    return (NSEventType) objc_msgSend(theReceiver, theSelector);
 }
 
 
 NSPoint invoke_msg_NSPoint_NSPoint_id(id theReceiver, SEL theSelector, NSPoint a, id b) {
-    NSPoint (*f)(id self, SEL op, NSPoint a, id b) = (NSPoint *)objc_msgSend;
+    NSPoint (*f)(id self, SEL op, NSPoint a, id b) = (void *)objc_msgSend;
     return f(theReceiver, theSelector, a, b);
 }
 
+/*
 NSEventSubtype invoke_msg_NSEventSubtype(id theReceiver, SEL theSelector) {
     return objc_msgSend(theReceiver, theSelector);
 }
-
+*/
 const char* invoke_msg_string(id theReceiver, SEL theSelector) {
     return objc_msgSend(theReceiver, theSelector);
 }
